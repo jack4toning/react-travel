@@ -1,5 +1,4 @@
 import { ChangeLanguageActionType, CHANGE_LANGUAGE } from './actions';
-// import { Translation } from 'react-i18next';
 
 type langCode = 'en' | 'zh';
 
@@ -24,6 +23,6 @@ export const languageReducer = (
     case CHANGE_LANGUAGE:
       return { ...prevState, language: action.payload };
     default:
-      return defaultState;
+      return prevState;
   }
 };

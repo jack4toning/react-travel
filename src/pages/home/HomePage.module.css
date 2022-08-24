@@ -3,3 +3,10 @@
   margin: 0 auto;
   min-height: 75vh;
 }
+
+.spinner,
+.error {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
