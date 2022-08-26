@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import languageData from '../../i18n/en.json';
-import { changeLanguageActionCreator } from '../../state/reducers/language/actions';
+import { changeLanguage } from '../../state/slices/language';
 import i18n from 'i18next';
 import { useSelector } from '../../state/hooks';
 
@@ -31,7 +31,7 @@ export function Header() {
   });
 
   const switchLanguage = (e: any) => {
-    dispatch(changeLanguageActionCreator(e.key));
+    dispatch(changeLanguage(e.key));
     i18n.changeLanguage(e.key);
   };
 

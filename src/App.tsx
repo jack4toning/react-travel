@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './App.module.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {
-  HomePage,
+  GlobalLayoutPage,
+  Home,
   NotFound,
   LoginPage,
   RegisterPage,
-  ProductPage,
+  Product,
 } from './pages';
 
 function App() {
@@ -14,11 +15,13 @@ function App() {
     <div className={styles.App}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='login' element={<LoginPage />} />
-          <Route path='register' element={<RegisterPage />} />
-          <Route path='products/:productId' element={<ProductPage />} />
-          <Route path='*' element={<NotFound />} />
+          <Route path="/" element={<GlobalLayoutPage />}>
+            <Route index element={<Home />} />
+            <Route path="products/:productId" element={<Product />} />
+          </Route>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
