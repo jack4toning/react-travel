@@ -10,11 +10,23 @@ import languageData from '../../i18n/en.json';
 import { changeLanguage } from '../../state/slices/language';
 import i18n from 'i18next';
 import { useSelector } from '../../state/hooks';
+import { signOut } from '../../state/slices';
 
 export function Header() {
   const navigate = useNavigate();
   const languageState = useSelector((state) => state.language);
+  const { token: jwt } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  // parse JWT to get username
+  let jwtPayload = null;
+  let username = null;
+  if (jwt) {
+    jwtPayload = jwt.split('.')[1];
+    jwtPayload = window.atob(jwtPayload);
+    jwtPayload = JSON.parse(jwtPayload);
+    username = jwtPayload.username;
+  }
 
   const langMenuItems = languageState.languageList.map(
     (item: any, index: number) => ({
@@ -35,6 +47,11 @@ export function Header() {
     i18n.changeLanguage(e.key);
   };
 
+  const handleSignOut = () => {
+    dispatch(signOut());
+    navigate('/signIn');
+  };
+
   return (
     <div className={styles['app-header']}>
       <div className={styles['top-header']}>
@@ -47,14 +64,26 @@ export function Header() {
           >
             {t(`header.language`)}
           </Dropdown.Button>
-          <Button.Group className={styles['button-group']}>
-            <Button>
-              <Link to={'Register'}>{t(`header.register`)}</Link>
-            </Button>
-            <Button>
-              <Link to={'Login'}>{t(`header.login`)}</Link>
-            </Button>
-          </Button.Group>
+          {username ? (
+            <div className={styles['user-profile']}>
+              <Typography.Text>Hi, {username}</Typography.Text>
+              <Button
+                onClick={handleSignOut}
+                className={styles['user-profile-btn']}
+              >
+                Sign out
+              </Button>
+            </div>
+          ) : (
+            <Button.Group className={styles['button-group']}>
+              <Button>
+                <Link to={'/sign/signUp'}>{t(`header.register`)}</Link>
+              </Button>
+              <Button>
+                <Link to={'/sign/signIn'}>{t(`header.login`)}</Link>
+              </Button>
+            </Button.Group>
+          )}
         </div>
       </div>
       <Layout.Header className={'main-header'}>
@@ -72,6 +101,9 @@ export function Header() {
         <Input.Search
           className={styles['search-input']}
           placeholder={t(`header.placeholder`)}
+          onSearch={(keywords) => {
+            navigate(`/products/filter/${keywords}`);
+          }}
         />
       </Layout.Header>
       <Menu

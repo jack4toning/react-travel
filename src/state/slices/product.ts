@@ -1,86 +1,46 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ThunkAction } from 'redux-thunk';
-import { RootState } from '../store';
 import axios from 'axios';
-import { DatabaseFilled } from '@ant-design/icons';
 
 export interface productState {
-  productDetails: any;
+  product: any;
   isLoading: boolean;
   error: string;
 }
 
 const initialState: productState = {
-  productDetails: {},
+  product: {},
   isLoading: false,
   error: '',
 };
 
-const getProductDetails = createAsyncThunk(
-  'product/getProductDetail',
-  async (productId: string, thunkAPI) => {
-    const { data: productDetails } = await axios.get(
+export const fetchProduct = createAsyncThunk(
+  'product/fetchProduct',
+  async (productId: string | undefined, thunkAPI) => {
+    const { data: product } = await axios.get(
       `http://123.56.149.216:8080/api/touristRoutes/${productId}`
     );
 
-    return productDetails;
+    return product;
   }
 );
 
 const productSlice = createSlice({
   name: 'product',
   initialState,
-  reducers: {
-    startFetch(state) {
-      state.isLoading = true;
-    },
-    finishFetch(state, action) {
-      state.productDetails = action.payload;
-    },
-    failToFetch(state, action) {
-      state.error = action.payload;
-    },
-    stopFetch(state) {
-      state.isLoading = false;
-    },
-  },
+  reducers: {},
   extraReducers: {
-    [getProductDetails.pending.type]: (state) => {
+    [fetchProduct.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [getProductDetails.fulfilled.type]: (state, action) => {
-      state.productDetails = action.payload;
+    [fetchProduct.fulfilled.type]: (state, action) => {
+      state.product = action.payload;
       state.isLoading = false;
     },
-    [getProductDetails.rejected.type]: (state, action) => {
-      state.error = action.payload;
+    [fetchProduct.rejected.type]: (state, action) => {
+      state.error = action.error.message;
       state.isLoading = false;
     },
   },
 });
 
-const { startFetch, finishFetch, failToFetch, stopFetch } =
-  productSlice.actions;
-type FetchproductDetailsActionType =
-  | ReturnType<typeof startFetch>
-  | ReturnType<typeof finishFetch>
-  | ReturnType<typeof failToFetch>
-  | ReturnType<typeof stopFetch>;
-
-// export const fetchProductDetailsActionCreator =
-//   (
-//     productId: string | undefined
-//   ): ThunkAction<void, RootState, unknown, FetchproductDetailsActionType> =>
-//   async (dispatch) => {
-//     try {
-//       dispatch(startFetch());
-//       const { data: productDetails } = await axios.get(
-//         `http://123.56.149.216:8080/api/touristRoutes/${productId}`
-//       );
-//       dispatch(finishFetch(productDetails));
-//     } catch (e: any) {
-//       dispatch(failToFetch(e.message));
-//     }
-//     dispatch(stopFetch());
-//   };
-export default productSlice.reducer;
+export const productReducer = productSlice.reducer;

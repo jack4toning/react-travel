@@ -1,9 +1,9 @@
-.page-content {
+/* .page-content {
   width: 1230px;
   margin: 0 auto;
-  /* min-height: 60vh; */
+  min-height: 60vh;
   min-height: calc(100vh - 220px);
-}
+} */
 
 .product-intro-contaitner {
   margin-top: 20px;

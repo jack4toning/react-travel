@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styles from './Home.module.css';
 import { SideMenu, Carousel, ProductCollection, Cooperative } from '..';
 import { Row, Col, Typography } from 'antd';
 import hotSiderImg from '../../assets/images/sider_1.png';
@@ -32,7 +31,7 @@ export const Home = () => {
   if (error) return <Error error={error} />;
 
   return (
-    <div className={styles['page-content']}>
+    <>
       <Row style={{ marginTop: 20 }}>
         <Col span={6}>
           <SideMenu />
@@ -80,6 +79,6 @@ export const Home = () => {
         }
         coopImages={[facebookImg, microsoftImg, youtubeImg, instagramImg]}
       />
-    </div>
+    </>
   );
 };

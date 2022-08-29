@@ -26,6 +26,15 @@
   margin-top: 5px;
 }
 
+.user-profile {
+  float: right;
+}
+
+.user-profile-btn {
+  /* padding: 3px 10px; */
+  margin-left: 8px;
+}
+
 .main-header {
   background-color: white !important;
   height: 60px;

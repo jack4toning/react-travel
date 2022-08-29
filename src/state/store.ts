@@ -1,7 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import languageReducer from './slices/language';
-import recommendedProductsReducer from './slices/recommendedProducts';
-import productReducer from './slices/product';
+
+import {
+  languageReducer,
+  recommendedProductsReducer,
+  productReducer,
+  filteredProductsReducer,
+  userReducer,
+} from './slices';
 // import { actionLog } from './middlewares/actionLog';
 
 export const store = configureStore({
@@ -9,6 +14,8 @@ export const store = configureStore({
     language: languageReducer,
     recommendedProducts: recommendedProductsReducer,
     product: productReducer,
+    filteredProducts: filteredProductsReducer,
+    user: userReducer,
   },
   // middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(), actionLog],
   devTools: true,

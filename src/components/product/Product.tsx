@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchProductDetailsActionCreator } from '../../state/slices/product';
+import { fetchProduct } from '../../state/slices/product';
 import { useSelector } from '../../state/hooks';
 import { useDispatch } from 'react-redux';
 import styles from './Product.module.css';
@@ -10,13 +10,11 @@ import { commentMockData } from './mockup';
 
 export const Product = () => {
   const { productId } = useParams();
-  const { isLoading, productDetails, error } = useSelector(
-    (state) => state.product
-  );
+  const { product, isLoading, error } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch<any>(fetchProductDetailsActionCreator(productId));
+    dispatch<any>(fetchProduct(productId));
   }, [dispatch, productId]);
 
   if (!productId)
@@ -36,7 +34,7 @@ export const Product = () => {
     features,
     fees,
     notes,
-  } = productDetails;
+  } = product;
 
   const introProps = {
     title,
@@ -91,7 +89,7 @@ export const Product = () => {
   ];
 
   return (
-    <div className={styles['page-content']}>
+    <>
       {/* product intro and date picker */}
       <div className={styles['product-intro-contaitner']}>
         <Row>
@@ -146,6 +144,6 @@ export const Product = () => {
           <ProductComments data={commentMockData} />
         </div>
       </div>
-    </div>
+    </>
   );
 };

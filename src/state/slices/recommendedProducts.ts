@@ -56,4 +56,4 @@ export const fetchRCProductListActionCreator =
     }
     dispatch(stopFetch());
   };
-export default recommendedProductsSlice.reducer;
+export const recommendedProductsReducer = recommendedProductsSlice.reducer;
