@@ -1,14 +1,7 @@
 import React from 'react';
 import styles from './App.module.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import {
-  // HomePage,
-  // ProductPage,
-  // FilteredProductsPage,
-  // SignInPage,
-  // SignUpPage,
-  NotFoundPage,
-} from './pages';
+import { NotFoundPage } from './pages';
 import { MainLayout, SignInUpLayout } from './layout';
 import { FilteredProducts, Home, Product, SignIn, SignUp } from './components';
 
