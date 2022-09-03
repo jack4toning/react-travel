@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from '../../assets/icons/logo.svg';
 import styles from './Header.module.css';
 import { Layout, Typography, Input, Menu, Button, Dropdown } from 'antd';
@@ -11,22 +11,30 @@ import { changeLanguage } from '../../state/slices/language';
 import i18n from 'i18next';
 import { useSelector } from '../../state/hooks';
 import { signOut } from '../../state/slices';
+import jwtDecode, { JwtPayload as DefaultJwtPayload } from 'jwt-decode';
+
+interface JwtPayload extends DefaultJwtPayload {
+  username: string;
+}
 
 export function Header() {
   const navigate = useNavigate();
-  const languageState = useSelector((state) => state.language);
-  const { token: jwt } = useSelector((state) => state.user);
+  const languageState = useSelector(state => state.language);
+  const { items: shoppingCartItems, isLoading } = useSelector(
+    state => state.shoppingCart
+  );
+  const { token: jwt } = useSelector(state => state.user);
+  const myOrder = useSelector(state => state.order.currentOrder);
   const dispatch = useDispatch();
 
   // parse JWT to get username
-  let jwtPayload = null;
-  let username = null;
-  if (jwt) {
-    jwtPayload = jwt.split('.')[1];
-    jwtPayload = window.atob(jwtPayload);
-    jwtPayload = JSON.parse(jwtPayload);
-    username = jwtPayload.username;
-  }
+  const [username, setUsername] = useState('');
+  useEffect(() => {
+    if (jwt) {
+      const { username } = jwtDecode<JwtPayload>(jwt);
+      setUsername(username);
+    }
+  }, [jwt]);
 
   const langMenuItems = languageState.languageList.map(
     (item: any, index: number) => ({
@@ -47,9 +55,9 @@ export function Header() {
     i18n.changeLanguage(e.key);
   };
 
-  const handleSignOut = () => {
+  const onSignOut = () => {
     dispatch(signOut());
-    navigate('/signIn');
+    navigate('/');
   };
 
   return (
@@ -60,37 +68,48 @@ export function Header() {
           <Dropdown.Button
             style={{ marginLeft: 15 }}
             overlay={<Menu items={langMenuItems} onClick={switchLanguage} />}
-            icon={<GlobalOutlined />}
-          >
+            icon={<GlobalOutlined />}>
             {t(`header.language`)}
           </Dropdown.Button>
-          {username ? (
-            <div className={styles['user-profile']}>
-              <Typography.Text>Hi, {username}</Typography.Text>
-              <Button
-                onClick={handleSignOut}
-                className={styles['user-profile-btn']}
-              >
-                Sign out
-              </Button>
-            </div>
-          ) : (
-            <Button.Group className={styles['button-group']}>
-              <Button>
-                <Link to={'/sign/signUp'}>{t(`header.register`)}</Link>
-              </Button>
-              <Button>
-                <Link to={'/sign/signIn'}>{t(`header.login`)}</Link>
-              </Button>
-            </Button.Group>
-          )}
+          <Button.Group className={styles['button-group']}>
+            {jwt ? (
+              <>
+                <Typography.Text
+                  strong
+                  style={{ marginRight: 10, lineHeight: 2.4 }}>
+                  Hi, {username}
+                </Typography.Text>
+                <Button loading={isLoading}>
+                  <Link to={'/shoppingCart'}>
+                    {t(`header.shoppingCart`)}({shoppingCartItems.length})
+                  </Link>
+                </Button>
+                <Button>
+                  <Link to={'/placeOrder'}>
+                    {t(`header.myOrder`)}(
+                    {myOrder ? (myOrder.state === 'Completed' ? 0 : 1) : 0})
+                  </Link>
+                </Button>
+                <Button onClick={onSignOut}>{t(`header.signOut`)}</Button>
+              </>
+            ) : (
+              <>
+                <Button>
+                  <Link to={'/sign/signUp'}>{t(`header.register`)}</Link>
+                </Button>
+                <Button>
+                  <Link to={'/sign/signIn'}>{t(`header.login`)}</Link>
+                </Button>
+              </>
+            )}
+          </Button.Group>
         </div>
       </div>
       <Layout.Header className={'main-header'}>
         <img
           className={styles['App-logo']}
           src={logo}
-          alt=""
+          alt=''
           onClick={() => {
             navigate('/');
           }}
@@ -101,7 +120,7 @@ export function Header() {
         <Input.Search
           className={styles['search-input']}
           placeholder={t(`header.placeholder`)}
-          onSearch={(keywords) => {
+          onSearch={keywords => {
             navigate(`/products/filter/${keywords}`);
           }}
         />

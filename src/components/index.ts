@@ -16,3 +16,8 @@ export * from './home';
 export * from './product';
 export * from './signIn';
 export * from './signUp';
+export * from './shoppinpCart';
+export * from './paymentCard';
+export * from './placeOrder';
+export * from './checkoutCard';
+export * from './paymentForm';

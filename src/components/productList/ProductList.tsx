@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { List, Rate, Space, Image, Tag, Typography } from 'antd';
+import { List, Rate, Space, Image, Tag, Typography, Spin } from 'antd';
 import { LikeOutlined, StarOutlined } from '@ant-design/icons';
+import styles from './ProductList.module.css';
 
 const { Text } = Typography;
 
@@ -22,6 +23,7 @@ interface PropsType {
   data: Product[];
   paging?: any;
   onPageChange?: (nextPage: any, pageSize: any) => void;
+  loading?: boolean;
 }
 
 const listData = (productList: Product[]) =>
@@ -55,7 +57,15 @@ export const ProductList: React.FC<PropsType> = ({
   data,
   paging,
   onPageChange,
+  loading,
 }) => {
+  if (loading)
+    return (
+      <div className={styles['spinner']}>
+        <Spin size="large" />
+      </div>
+    );
+
   const products = listData(data);
   return (
     <List
@@ -80,9 +90,9 @@ export const ProductList: React.FC<PropsType> = ({
           </div>
         )
       }
-      renderItem={(item) => (
+      renderItem={(item, index) => (
         <List.Item
-          key={item.title}
+          key={index}
           actions={[
             <IconText
               icon={StarOutlined}
@@ -111,22 +121,22 @@ export const ProductList: React.FC<PropsType> = ({
                 {item.discountPresent ? (
                   <>
                     <Text style={{ fontSize: 20, fontWeight: 400 }} delete>
-                      ¥ {item.originalPrice}
+                      ${item.originalPrice}
                     </Text>
                     <Text
                       type="danger"
                       style={{ fontSize: 20, fontWeight: 400 }}
                     >
                       {' '}
-                      ¥ {item.price}
+                      ${item.price}
                     </Text>
                   </>
                 ) : (
                   <Text style={{ fontSize: 20, fontWeight: 400 }}>
-                    ¥ {item.price}
+                    ${item.price}
                   </Text>
                 )}
-                <Link to={'/detail/' + item.id}> {item.title}</Link>
+                <Link to={'/product/' + item.id}> {item.title}</Link>
               </>
             }
             description={item.tags}

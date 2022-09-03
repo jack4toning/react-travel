@@ -6,7 +6,11 @@
     "register": "注册",
     "login": "登陆",
     "placeholder": "请输入目的地/主题/关键字",
-    "language": "语言"
+    "language": "语言",
+    "shoppingCart": "购物车",
+    "signOut": "注销",
+    "welcome": "欢迎",
+    "myOrder": "我的订单"
   },
   "mainMenu": {
     "home_page": "旅游首页",

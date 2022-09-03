@@ -30,10 +30,16 @@ const userSlice = createSlice({
   reducers: {
     signOut(state) {
       state.token = null;
+      state.isLoading = false;
+      state.error = null;
+    },
+    clearError(state) {
+      console.log(123123);
+      state.error = null;
     },
   },
   extraReducers: {
-    [signIn.pending.type]: (state) => {
+    [signIn.pending.type]: state => {
       state.isLoading = true;
     },
     [signIn.fulfilled.type]: (state, action) => {
@@ -48,5 +54,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { signOut } = userSlice.actions;
+export const { signOut, clearError } = userSlice.actions;
 export const userReducer = userSlice.reducer;

@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './NotFoundPage.module.css';
+import styles from './NotFound.module.css';
 
-export const NotFoundPage = () => {
+export const NotFound = () => {
   return (
     <div className={styles['page-content']}>
       <h1>404 not found</h1>

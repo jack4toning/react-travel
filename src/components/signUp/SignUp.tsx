@@ -7,6 +7,7 @@ import axios from 'axios';
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const onFinish = async (values: any) => {
     console.log('Success:', values);
@@ -19,8 +20,9 @@ export const SignUp: React.FC = () => {
         confirmPassword,
       });
       navigate('../signIn');
-    } catch (error) {
+    } catch (e: any) {
       setIsLoading(false);
+      setError(e.message);
       console.log(error);
       alert('Failed to register...');
     }
@@ -30,36 +32,41 @@ export const SignUp: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
 
+  const onRetype = () => {
+    if (error) setError(null);
+  };
+
   return (
     <Form
-      name="basic"
+      name='basic'
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
-      autoComplete="off"
-      className={styles['register-form']}
-    >
+      autoComplete='off'
+      className={styles['register-form']}>
       <Form.Item
-        label="Username"
-        name="username"
+        label='Username'
+        name='username'
         rules={[{ required: true, message: 'Please input your username' }]}
-      >
-        <Input />
+        hasFeedback
+        validateStatus={isLoading ? 'validating' : error ? 'error' : ''}>
+        <Input onChange={onRetype} />
       </Form.Item>
 
       <Form.Item
-        label="Password"
-        name="password"
+        label='Password'
+        name='password'
         rules={[{ required: true, message: 'Please input your password' }]}
-      >
-        <Input.Password />
+        hasFeedback
+        validateStatus={isLoading ? 'validating' : error ? 'error' : ''}>
+        <Input.Password onChange={onRetype} />
       </Form.Item>
 
       <Form.Item
-        label="Confirm Password"
-        name="confirmPassword"
+        label='Confirm Password'
+        name='confirmPassword'
         hasFeedback
         rules={[
           { required: true, message: 'Please confirm your password' },
@@ -74,12 +81,18 @@ export const SignUp: React.FC = () => {
             },
           }),
         ]}
-      >
-        <Input.Password />
+        validateStatus={isLoading ? 'validating' : error ? 'error' : ''}
+        help={error && 'username or password is invalid'}>
+        <Input.Password onChange={onRetype} />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button loading={isLoading} type="primary" htmlType="submit">
+        <Button
+          disabled={error !== null}
+          style={{ width: '100%' }}
+          loading={isLoading}
+          type='primary'
+          htmlType='submit'>
           Submit
         </Button>
       </Form.Item>

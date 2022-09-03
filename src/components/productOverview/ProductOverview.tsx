@@ -32,7 +32,7 @@ export const ProductOverview: React.FC<PropsType> = ({
         src={imageSrc}
         {...measurement}
         onClick={() => {
-          navigate(`/products/${id}`, { replace: true });
+          navigate(`/products/${id}`);
           window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         }}
       />
