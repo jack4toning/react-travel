@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: ['main']
+    branches: ['master']
   pull_request:
-    branches: ['main']
+    branches: ['master']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,7 +23,20 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 从 Github 拉取仓库代码到 Github 服务器的 $GITHUB_WORKSPACE 目录下
       - uses: actions/checkout@v3
+
+      - name: Cache
+        # cache 在这里主要用于缓存 npm，提升构建速率
+        # https://github.com/actions/cache
+        uses: actions/cache@v3.0.8
+        # npm 缓存的路径可查看 https://docs.npmjs.com/cli/cache#cache
+        # 由于这里 runs-on 是 ubuntu-latest，因此配置 ~/.npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -43,6 +56,6 @@ jobs:
         run: |
           git config --global user.email "18200388927@163.com"
           git config --global user.name "Moe"
-          git remote add origin https://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@github.com/jack4toning/react-travel.git
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/jack4toning/react-travel.git
       - name: Deploy
         run: npm run deploy
