@@ -43,8 +43,9 @@ function App() {
     const publicUrl = process.env.PUBLIC_URL;
     if (publicUrl) {
       if (route === '/') return `/${publicUrl}`;
-      else return `/${publicUrl}/${route}`;
+      else return `/${publicUrl}${route}`;
     }
+    return route;
   };
 
   return (
@@ -76,7 +77,7 @@ function App() {
               }
             />
           </Route>
-          <Route path={formRoute('sign')} element={<SignInUpLayout />}>
+          <Route path={formRoute('/sign')} element={<SignInUpLayout />}>
             <Route path='signIn' element={<SignIn />} />
             <Route path='signUp' element={<SignUp />} />
           </Route>
