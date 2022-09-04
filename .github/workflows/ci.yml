@@ -29,7 +29,7 @@ jobs:
       - name: Cache
         # cache 在这里主要用于缓存 npm，提升构建速率
         # https://github.com/actions/cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v2
         # npm 缓存的路径可查看 https://docs.npmjs.com/cli/cache#cache
         # 由于这里 runs-on 是 ubuntu-latest，因此配置 ~/.npm
         with:
