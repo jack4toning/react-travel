@@ -39,5 +39,9 @@ jobs:
         run: |
           npm install --force
           npm run build
+      - name: Set up user
+        run: |
+          git config --global user.email "18200388927@163.com"
+          git config --global user.name "Moe"
       - name: Deploy
         run: npm run deploy
