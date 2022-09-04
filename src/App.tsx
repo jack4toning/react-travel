@@ -31,7 +31,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   return children;
 };
 function App() {
-  console.log('test123456789');
+  console.log('test1234567890');
   const dispatch = useDispatch();
   const { token: jwt } = useSelector(state => state.user);
 
